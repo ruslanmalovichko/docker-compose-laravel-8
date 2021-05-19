@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,20 +15,31 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('posts');
+  // ddd(get_class_methods($posts[0]));
+  // ddd($posts);
+  // ddd((string)$posts[0]);
+
+  return view('posts', [
+    'posts' => Post::all()
+  ]);
 });
 
 Route::get('posts/{post}', function ($slug) {
-  if (! file_exists($path = __DIR__ . "/../resources/posts/{$slug}.html")) {
-    return redirect('/');
-    // abort(404);
-  }
+  // Find a post by its slug and pass it to a view called "post"
 
-  // $post = cache()->remember("posts.{$slug}", 1200, function() use ($path) {
-  //   return file_get_contents($path);
-  // });
-  $post = cache()->remember("posts.{$slug}", 1200, fn() => file_get_contents($path)); // Short form
+  return view('post', [
+    'post' => Post::find($slug)
+  ]);
+  // if (! file_exists($path = __DIR__ . "/../resources/posts/{$slug}.html")) {
+  //   return redirect('/');
+  //   // abort(404);
+  // }
 
-  return view('post', ['post' => $post]);
+  // // $post = cache()->remember("posts.{$slug}", 1200, function() use ($path) {
+  // //   return file_get_contents($path);
+  // // });
+  // $post = cache()->remember("posts.{$slug}", 1200, fn() => file_get_contents($path)); // Short form
+
+  // return view('post', ['post' => $post]);
 })->where('post', '[A-z_\-]+');
 
