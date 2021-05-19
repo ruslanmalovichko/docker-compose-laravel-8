@@ -28,43 +28,18 @@ class Post
 
   public static function all()
   {
-    // $files = File::files(resource_path("posts"));
-    // $posts = [];
-    // foreach ($files as $file) {
-    //   $document = YamlFrontMatter::parseFile($file);
-    //   $posts[] = new Post(
-    //     $document->title,
-    //     $document->excerpt,
-    //     $document->date,
-    //     $document->body(),
-    //     $document->slug,
-    //   );
-    // }
-
-    // return $posts; // foreach way
-
-    // $files = File::files(resource_path("posts"));
-    // return $posts = array_map(function($file) {
-    //   $document = YamlFrontMatter::parseFile($file);
-
-    //   return new Post(
-    //     $document->title,
-    //     $document->excerpt,
-    //     $document->date,
-    //     $document->body(),
-    //     $document->slug,
-    //   );
-    // }, $files); // array_map way
-
-    return $posts = collect($files = File::files(resource_path("posts")))
-      ->map(fn($file) => YamlFrontMatter::parseFile($file))
-      ->map(fn($document) => new Post(
-        $document->title,
-        $document->excerpt,
-        $document->date,
-        $document->body(),
-        $document->slug
-      )); // Laravel collect way
+    return cache()->rememberForever('posts.all', function() {
+      return collect($files = File::files(resource_path("posts")))
+        ->map(fn($file) => YamlFrontMatter::parseFile($file))
+        ->map(fn($document) => new Post(
+          $document->title,
+          $document->excerpt,
+          $document->date,
+          $document->body(),
+          $document->slug
+        ))
+        ->sortByDesc('date');
+    });
   }
 
   // public static function find($slug)
