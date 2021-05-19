@@ -4,10 +4,14 @@
 <link rel="stylesheet" href="/app.css">
 
 <body>
-<article>
-<?= $post; ?>
-</article>
+  <article>
+    <h1><?= $post->title; ?></h1>
 
-<a href="/">Go Back</a>
+    <div>
+      <?= $post->body; ?>
+    </div>
+  </article>
+
+  <a href="/">Go Back</a>
 </body>
 
