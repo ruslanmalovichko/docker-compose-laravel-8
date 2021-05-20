@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,21 +23,8 @@ Route::get('/', function () {
 });
 
 Route::get('posts/{post}', function ($slug) {
-  // Find a post by its slug and pass it to a view called "post"
-
   return view('post', [
-    'post' => Post::find($slug)
+    'post' => Post::findOrFail($slug)
   ]);
-  // if (! file_exists($path = __DIR__ . "/../resources/posts/{$slug}.html")) {
-  //   return redirect('/');
-  //   // abort(404);
-  // }
-
-  // // $post = cache()->remember("posts.{$slug}", 1200, function() use ($path) {
-  // //   return file_get_contents($path);
-  // // });
-  // $post = cache()->remember("posts.{$slug}", 1200, fn() => file_get_contents($path)); // Short form
-
-  // return view('post', ['post' => $post]);
-})->where('post', '[A-z_\-]+');
+});
 
