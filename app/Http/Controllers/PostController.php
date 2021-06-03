@@ -8,17 +8,10 @@ use App\Models\Category;
 class PostController extends Controller
 {
   public function index() {
-    // \Illuminate\Support\Facades\DB::listen(function($query) {
-    //   logger($query->sql, $query->bindings);
-    // });
     return view('posts.index', [
-      // 'posts' => Post::all()
-      // 'posts' => Post::latest()->with(['category', 'author'])->get()
-      // 'posts' => Post::latest()->get(),
-      // 'posts' => $posts->get(),
-      'posts' => Post::latest()->filter(request(['search', 'category', 'author']))->get(),
-      // 'categories' => Category::all(),
-      // 'currentCategory' => Category::firstWhere('slug', request('category'))
+      'posts' => Post::latest()->filter(
+        request(['search', 'category', 'author'])
+      )->paginate(6)->withQueryString(),
     ]);
   }
 
